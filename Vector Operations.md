@@ -12,7 +12,9 @@ Tutorial
 Data
 ----
 
-> **Note:** The tutorial portion of this lab uses a variety of data layers, in a somewhat random way, to demonstrate how each of the functions work. After each section, remove all layers or close ArcMap. Also, the assignment uses a completely different set of layers.
+> **Note:** The tutorial portion of this lab uses a variety of data layers, in a somewhat random way, to demonstrate how each of the functions works. You will work through steps demonstrating how buffering, map dissolving and vector overlay operations work. After each section, remove all layers or close ArcMap. It's always a good idea to work through this exercise more than once to fully understand what's going on in each operation. Make sure to view the outputs, both the map features and their attributes.
+
+The assignment itself requires implementing variations of the tools you're learning in the tutorial, using a completely different set of layers.
 
 We will continue to work on data that you have already copied from the netowrk drive. Please remember to conduct all operations on *your* data, as you do not have write access to the network drive.
 
@@ -24,7 +26,7 @@ For this lab exercise, you will be working with the following data, all located 
 -   `SEtracts2010.shp`
 -   `educ_utm.shp`
 
-Next, set up your Environment in ArcCatalog and ArcMap. This will specify a location for all of your outputs when running different operations. Select the Geoprocessing file menu, and choose Environments.
+Before you begin, set up your Environment in ArcCatalog and ArcMap. This will specify a location for all of your outputs when running different operations. Select the Geoprocessing file menu, and choose Environments.
 
 ![](images/ArcMapMenuEnvironments.png) 
 
@@ -51,11 +53,13 @@ Right click on the name of the field at the top of the column and go to Calculat
 
 Click Yes to confirm you want to edit this field. In the Calculate Geometry dialog box make sure the Units: reads `Meters [m]`. Click OK.
 
-You should see the new length values appear in the new field.
+You should see the new length values appear in the new field. If you want to recalculate the length in a different unit, that is possible by re-running the dialog.
 
 Add the `zipcodes_utm` shapefile to ArcMap and open its attribute table.
 
 Find the `AREA` field. This field encodes the area of each zip code but it is in square decimal degrees. Create a new field called `Area_m` and calculate its value to be the area in square meters. Follow the same procedures as for the railroads but choose to calculate Area in square meters.
+
+NOTE: when you calculate the geometry of a line features, the default calculation is the line length (but there are other calculations that can be performed based on the coordinates that make up the lines). With polygon features, the default calcuation is area (but you can also calculate the perimeter and the north-south and east-west centroids).
 
 Remove all data layers from ArcMap.
 
@@ -74,26 +78,32 @@ Here, you will learn how to use ArcMap to perform a buffer operation on points a
 
 3.  Drag `educ_utm` into the input features box. Call the output shapefile `educ_buf5k` and make sure it saves to your workspace (which might or might not be the default location). For the Distance box, under Linear Unit, enter 5000 meters. For Dissolve Type choose `ALL`. Leave the rest of the options as the defaults. Press OK.
 
-4.  View the new `educ_buf5k` shapefile in ArcMap. Zoom in to where there are clusters of schools to see how the buffers merge together (i.e. are dissolved as single polygons in these locations).
+4.  View the new `educ_buf5k` shapefile in ArcMap. Zoom in to where there are clusters of schools to see how the buffers merge together (i.e. are dissolved as single polygons in these locations). Open the attribute table for `educ_buf5k`. Note that although there are multiple polygons displayed on screen, there is only a single record in the attribute table. This is because in a shapefile (ESRI’s implementation of the spaghetti vector data model) multiple features can be associated with a single record. This is called a "multipart" feature (i.e., all of the polygons you see are being treated as though they are a single feature). Sometimes, it is useful to "break these apart". For instance, if you wanted to know the areas of each of those discrete polygons, you'd need to treat each one a  separate feature. To make this conversion, where each polygon is represented as a single record in the attribute table, go to ArcToolbox→Data Management Tools→Features→Multipart to Singlepart and input `edu_buf5k` and name the output `edu_buf5k_single`. Open the output table from the resulting shapefile and confirm that it has multiple records—one for each feature.
 
-5.  Repeat the buffer operation with this shapefile (`educ_utm`), experimenting with different settings in the Buffer tool. For example, change the distance in the Linear Unit option to a larger value and try the `NONE` dissolve option. Note that the operation can take a lot of time given certain settings. These types of operations can require significant processing power.
+5.  Now repeat the process you took in step 3, buffering `educ_utm` at 5000 meters, but this time, set the Dissolve Type to `NONE` and naming the output `edu_buf5k_nodiss`. Leave the rest of the options as the defaults. Press OK. Now examine the resulting features and the attribute table. You will notice that each original point has its own buffer around it. In the attribute table you will see a one-to-one correspondence between the attributes of the original `educ_utm` and those of `edu_buf5k_nodiss`. 
 
-6.  Open the attribute table for `educ_buf5k`. Note that although there are multiple polygons displayed on screen, there is only a single record in the attribute table. This is because in a shapefile (ESRI’s implementation of the spaghetti vector data model) multiple features can be associated with a single record. It is often better to have an individual record for each feature. To make this conversion, where each polygon is represented as a single record in the attribute table, go to ArcToolbox→Data Management Tools→Features→Multipart to Singlepart and input `edu_buf5k` and name the output `edu_buf5k_single`. Open the output table from the resulting shapefile and confirm that it has multiple records—one for each feature.
+6. Repeat the buffer operation with this shapefile (`educ_utm`), experimenting with different settings in the Buffer tool. For example, change the distance in the Linear Unit option to a larger value and try out some of the other options (Side Type and End Type are worth exploring). Note that the operation can take a lot of time given certain settings. These types of operations can require significant processing power.
 
 When you are finished, close ArcMap.
 
 Map Dissolve
 ------------
 
-Here, you will learn how to use ArcMap to generalize a data layer by dissolving adjacent polygons with identical values.
+Here, you will learn how to use ArcMap to generalize a data layer with the Dissolve operation. 
 
-Add the tracts\_utm shapefile. Open the attribute table and find the field `FIPSSTCO`. This field is an identifier for each individual state (42) and county (e.g. 091 for Montgomery County). Of course, many individual tracts share the same value for this field. It is thus possible to perform a map dissolve operation on the tracts\_utm shapefile, using the `FIPSSTCO` field as the dissolve field.
+Go to the Geoprocessing file menu and select Dissolve. Note that the Dissolve tool can also be accessed from ArcToolbox (ArcToolbox→Data Management Tools→Generalization→Dissolve)
+
+Drag the tracts\_utm shapefile into the input box. Name the output shapefile tracts\_dis.shp. Leave all other settings alone for now. Press OK.
+
+View the resulting shapefile in ArcMap. Effectively have generalized the tracts of Southeast PA and created an outline of the region. This can be a really helpful tool!
+
+It is also possible to generalize polygons with identical values. Add the tracts\_utm shapefile. Open the attribute table and find the field `FIPSSTCO`. This field is an identifier for each individual state (42) and county (e.g. 091 for Montgomery County). Of course, many individual tracts share the same value for this field. It is thus possible to perform a map dissolve operation on the tracts\_utm shapefile, using the `FIPSSTCO` field as the dissolve field.
 
 Go to the Geoprocessing file menu and select Dissolve. Note that the Dissolve tool can also be accessed from ArcToolbox (ArcToolbox→Data Management Tools→Generalization→Dissolve)
 
 Drag the tracts\_utm shapefile into the input box. Name the output shapefile tracts\_dis.shp. Under the Dissolve Field option click `FIPSSTCO`. Press OK.
 
-View the resulting shapefile in ArcMap. It should appear just as the counties shapefile does. Add the `counties_UTM` file to ArcMap for comparison.
+View the resulting shapefile in ArcMap. Add the `counties_UTM` file to ArcMap for comparison. It should appear just as the counties shapefile does.
 
 Remove all layers from ArcMap.
 
