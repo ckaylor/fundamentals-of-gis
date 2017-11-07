@@ -17,26 +17,53 @@ This lab exercise will be more time-consuming than most of the previous labs. Th
 
 # Data
 
-The data are from Costa Rica:
+Our focus in this lab will be the Los Santos Natural Forest Preserve in Costa Rica. We'll explore two different raster data sets that allow us to analyze terrain and imagery.
+
+DATA SOURCES
+There are three items you'll need to download (download instructions follow these descriptions):
 
 * [LosSantosNR](data/LosSantosNR.zip) - A zipped shapefile of the boundaries of the Los Santos Natural reserve in Costa Rica.
-* Please list satelite datasets with short description.
+* A Digital Elevation Model (DEM) of the Los Santos area created from the Space Shuttle in 2000 by the Shuttle Radar Topography Mission (SRTM). This DEM has a resolution of 1 Arc Second, or roughly 30 meters, depeding on latitude. For more information on the data from the STRM, go here: [https://lta.cr.usgs.gov/SRTM1Arc](https://lta.cr.usgs.gov/SRTM1Arc)
+* A LandsatLook image of the Los Santos area from the Landsat 8 OLI (Operational Land Imager). which provides (among other things) a natural color image of the Earth's surface taken from the Landsat8 satellite. For more information, go here: [https://lta.cr.usgs.gov/L8](https://lta.cr.usgs.gov/L8)
 
-The Los Santos National Reserve shapefile can be downloaded from the link above. Satellite imagery will be obtained from the [USGS EarthExplorer website](http://earthexplorer.usgs.gov). To download the satellite data:
+DONWLOADING THE FILES
+The Los Santos National Forest Reserve shapefile can be downloaded from the link above. Once you have downloaded the shapefile, examining its properties (especially projection information and attributes) as in previous labs.
 
+Satellite imagery will be obtained from the [USGS EarthExplorer website](http://earthexplorer.usgs.gov).
+
+NOTE: In order to download the data you need for this lab, you'll first need to register with EarthExplorer.
+
+To download the satellite data:
 
 1. Go to <http://earthexplorer.usgs.gov>. The Search Criteria tab should be active (upper left), but if it isn't, click on it to select it.
-2. In the Coordinates tab, click Add Coordinate. Enter the coordinates 9° 32' North, 83° 54' West, as shown below:
+2. In the Coordinates tab, click Add Coordinate. Enter the coordinates 9° 32' 0" North, 83° 54' 0" West, as shown below:
     
     ![](images/Lab7Fig1.jpg)\
     
-4. Click the `Data Sets >>` button at the bottom, and check the boxes for the following datasets:
-    a.	Landsat Archive/Collection 1 Level-1/L8 OLI/TIRS C1 Level-1
-    b.	Digital Elevation/SRTM/SRTM 1 Arc-Second Global
-5. Go to the results tab and select the L8 OLI/TIRS C1 Level-1 option from the drop down menu. Search for and download the file named LC08_L1TP_015053_20170126_20170218_01_T1
-6. Select the SRTM 1 Arc-Second Global option from the drop down menu and download the file with the entity id: SRTM1N09W084V3. 
-    a. What is a digital elevation model?
-7. The Landsat file is a in a zip archive having the extension `.tar.gz`. Use 7-Zip to extract it. It may have a nested archive, meaning you will have to extract it twice.
+3. Click the Data Sets>> button at the bottom of the page, beneath the coordinates you just identified. In the resulting window, in the list at left, locate "Digital Elevation" and "Landsat" check the following two boxes underneath each respectively for the following datasets (as shown below): 
+a. Digital Elevation/SRTM/SRTM 1 Arc-Second Global 
+b. Landsat Archive/Collection 1 Level-1/L8 OLI/TIRS C1 Level-1 
+
+INSERT IMAGE 1 HERE
+
+4. In the Search Results, you'll see a drop down menue to identify which data set you are downloading. Select the SRTM 1 Arc-Second Global option from the drop down menu.
+
+5. You should see only one file for the Los Santos Area, which has the entity id: SRTM1N09W084V3 (see image below).
+
+INSERT IMAGE 2 HERE
+
+6. Notice, there are several icons, one of which has a green arrow pointing down. That'd be the download button. When you click on this button, you'll see a pop-up which asks which file you'd like to download. For both this data set and the Landsat imagery below, select the GeoTIFF formatted file (which is simply a TIFF bitmap image with a georeference).
+
+INSERT IMAGE 3 HERE
+
+7. The Landsat file is a in a zip archive having the extension .tar.gz. Use 7-Zip or some other extraction utility to extract it. It may have a nested archive, meaning you will have to extract it twice.
+
+Question A. What is a digital elevation model?
+
+8. Go back to the to the results tab and select the L8 OLI/TIRS C1 Level-1 option from the drop down menu. You will observe that there are many possible files to choose from. This is because the Landsat 8 satellite passes by the region frequently (unlike the one-off shuttle mission that gave us the elevation data above). 
+
+9. Following the same basic procedure as above, locate and download the file named LC08_L1TP_015053_20170126_20170218_01_T1 (NOTE: part of this file contains the date of that the image was acquired by Landsat 8 (26 January 2017 or 20170126)).
+
 
 ## Opening and Aligning Raster Data
 
